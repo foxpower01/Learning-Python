@@ -28,3 +28,11 @@ if isNegative:
     decimal = -1 * decimal
 print(output + decimal)
 print(deciPlaces)
+
+def decimalToBase(number, base):
+    numPlaces = []
+    output = 0
+    for item in list(number)[::-1]:
+        numPlaces.append(item)
+    for i in range(len(numPlaces)):
+        output += base ** i * numPlaces[i]
