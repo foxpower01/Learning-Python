@@ -1,8 +1,6 @@
-import numbers
-
-
 def primeFactors(number):
     factor = 2
+    number = abs(number)
     numberSave = number
     primeFactors = []
     while factor * factor <= number:
@@ -15,6 +13,7 @@ def primeFactors(number):
         primeFactors.append(number)
     primeFactors.append(1)
     primeFactors.append(numberSave)
+    print(primeFactors)
     return(primeFactors)
 
 #def factors(number):
@@ -48,14 +47,25 @@ def possibleFactors(primes):
     return(factors)
 
 def findFactor(terms):
+    listOfFactors = []
+    tempCos = [0, 0, 0, 0]
     leadingCoFactors = possibleFactors(primeFactors(terms[0]))
     constantFactors = possibleFactors(primeFactors(terms[-1]))
     for fac in constantFactors:
         for tor in leadingCoFactors:
             print(fac / tor)
-            print(terms[0] * ((fac / tor) ** 3) + terms[1] * ((fac / tor) ** 2) + terms[2] * ((fac / tor)) + terms[3])
-            if terms[0] * ((fac / tor) ** 3) + terms[1] * ((fac / tor) ** 2) + terms[2] * ((fac / tor)) + terms[3] == 0:
-                return(fac / tor)
+            temp = 0
+            for i in range(len(terms)):
+                tempCos[i] = terms[i] + temp
+                temp = terms[i] * (fac / tor)
+#            temp = terms[0] * (fac / tor)
+#            temp = (terms[1] + temp) * (fac / tor)
+#            temp = (terms[2] + temp) * (fac / tor)
+#            temp = (terms[3] + temp)
+            print(tempCos)
+            if tempCos[-1] == 0 and listOfFactors.count(fac / tor) == 0:
+                listOfFactors.append(fac / tor)
+    return(listOfFactors)
     
 equation = input("input a cubic in the form 'ax+bx+cx+d', with the terms in order of decending powers. Include all terms with a 0 coefficient, and include 1 coefficients (no naked x's). Don't input powers.\n")
 terms = list(map(lambda x: int(x), equation.split("x")))
