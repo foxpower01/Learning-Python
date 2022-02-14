@@ -53,6 +53,7 @@ def findFactor(terms):
     for fac in constantFactors:
         for tor in leadingCoFactors:
             print(fac / tor)
+            print(terms[0] * ((fac / tor) ** 3) + terms[1] * ((fac / tor) ** 2) + terms[2] * ((fac / tor)) + terms[3])
             if terms[0] * ((fac / tor) ** 3) + terms[1] * ((fac / tor) ** 2) + terms[2] * ((fac / tor)) + terms[3] == 0:
                 return(fac / tor)
     
@@ -62,3 +63,4 @@ terms = list(map(lambda x: int(x), equation.split("x")))
 print(terms)
 print(int(terms[1]))
 print(findFactor(terms))
+print(terms[0] * ((-0.75561) ** 3) + terms[1] * ((-0.75561) ** 2) + terms[2] * ((-0.75561)) + terms[3])
