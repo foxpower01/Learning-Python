@@ -1,3 +1,5 @@
+import math
+
 def primeFactors(number):
     factor = 2
     number = abs(number)
@@ -46,31 +48,61 @@ def possibleFactors(primes):
     print(factors)
     return(factors)
 
+def syntheticDivision(terms, factor):
+    tempCos = []
+    temp = 0
+    for i in range(len(terms)):
+        tempCos.append(0)
+    for i in range(len(terms)):
+        tempCos[i] = terms[i] + temp
+        temp = tempCos[i] * (factor)
+    return(tempCos)
+
 def findFactor(terms):
     listOfFactors = []
-    tempCos = [0, 0, 0, 0]
+    listOfPosFactors = []
     leadingCoFactors = possibleFactors(primeFactors(terms[0]))
     constantFactors = possibleFactors(primeFactors(terms[-1]))
     for fac in constantFactors:
         for tor in leadingCoFactors:
-            print(fac / tor)
-            temp = 0
-            for i in range(len(terms)):
-                tempCos[i] = terms[i] + temp
-                temp = terms[i] * (fac / tor)
-#            temp = terms[0] * (fac / tor)
-#            temp = (terms[1] + temp) * (fac / tor)
-#            temp = (terms[2] + temp) * (fac / tor)
-#            temp = (terms[3] + temp)
-            print(tempCos)
-            if tempCos[-1] == 0 and listOfFactors.count(fac / tor) == 0:
+            if listOfPosFactors.count(fac / tor) == 0:
+                listOfPosFactors.append(fac / tor)
+                print(fac/tor)
+            tempCos = syntheticDivision(terms, fac / tor)
+            if (tempCos[-1] > -0.01 and tempCos[-1] < 0.01) and listOfFactors.count(fac / tor) == 0:
                 listOfFactors.append(fac / tor)
-    return(listOfFactors)
+                nextCos = tempCos
+    if len(listOfFactors) > 0:
+        return([listOfFactors, nextCos])
+    else: 
+        for factor in listOfPosFactors:
+            if factor > 0:
+                tempCos = syntheticDivision(terms, math.sqrt(factor))
+                if tempCos[-1] > -0.01 and tempCos[-1] < 0.01:
+                    listOfFactors.append("sqrt" + factor)
+                    nextCos = tempCos
+    if len(listOfFactors) > 0:
+        return([listOfFactors, nextCos])
+
+def solveQuadratic(terms):
+    a = terms[0]
+    b = terms[1]
+    c = terms[2]
+    roots = []
+    if b ** 2 - 4 * a * c >= 0:
+        for i in range(2):
+            root = -(b + (-1 ** i) * math.sqrt(b ** 2 - 4 * a * c)) / 2 * a
+            if roots.count(root) == 0:
+                roots.append(root)
+        return(roots)
+    else: 
+        return("coplex roots")
     
 equation = input("input a cubic in the form 'ax+bx+cx+d', with the terms in order of decending powers. Include all terms with a 0 coefficient, and include 1 coefficients (no naked x's). Don't input powers.\n")
 terms = list(map(lambda x: int(x), equation.split("x")))
 
 print(terms)
 print(int(terms[1]))
-print(findFactor(terms))
-print(terms[0] * ((-0.75561) ** 3) + terms[1] * ((-0.75561) ** 2) + terms[2] * ((-0.75561)) + terms[3])
+#results = findFactor(terms)
+#print(results)
+print(solveQuadratic(terms))
