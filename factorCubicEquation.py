@@ -61,48 +61,59 @@ def syntheticDivision(terms, factor):
 def findFactor(terms):
     listOfFactors = []
     listOfPosFactors = []
-    leadingCoFactors = possibleFactors(primeFactors(terms[0]))
-    constantFactors = possibleFactors(primeFactors(terms[-1]))
-    for fac in constantFactors:
-        for tor in leadingCoFactors:
-            if listOfPosFactors.count(fac / tor) == 0:
-                listOfPosFactors.append(fac / tor)
-                print(fac/tor)
-            tempCos = syntheticDivision(terms, fac / tor)
-            if (tempCos[-1] > -0.01 and tempCos[-1] < 0.01) and listOfFactors.count(fac / tor) == 0:
-                listOfFactors.append(fac / tor)
-                nextCos = tempCos
-    if len(listOfFactors) > 0:
-        return([listOfFactors, nextCos])
-    else: 
-        for factor in listOfPosFactors:
-            if factor > 0:
-                tempCos = syntheticDivision(terms, math.sqrt(factor))
-                if tempCos[-1] > -0.01 and tempCos[-1] < 0.01:
-                    listOfFactors.append("sqrt" + factor)
+    if terms[-1] == 0:
+        listOfFactors.append(0)
+        if solveQuadratic(terms) != "complex roots":
+            for factor in solveQuadratic(terms):
+                listOfFactors.append(factor)
+        else:
+            listOfFactors.append("complex roots")
+        return(listOfFactors)
+    else:
+        leadingCoFactors = possibleFactors(primeFactors(terms[0]))
+        constantFactors = possibleFactors(primeFactors(terms[-1]))
+        for fac in constantFactors:
+            for tor in leadingCoFactors:
+                if listOfPosFactors.count(fac / tor) == 0:
+                    listOfPosFactors.append(fac / tor)
+                    print(fac/tor)
+                tempCos = syntheticDivision(terms, fac / tor)
+                if (tempCos[-1] > -0.01 and tempCos[-1] < 0.01) and listOfFactors.count(fac / tor) == 0:
+                    listOfFactors.append(fac / tor)
                     nextCos = tempCos
-    if len(listOfFactors) > 0:
-        return([listOfFactors, nextCos])
+        if len(listOfFactors) > 2:
+            return([listOfFactors, nextCos])
+        else: 
+            for factor in listOfPosFactors:
+                if factor > 0:
+                    tempCos = syntheticDivision(terms, math.sqrt(factor))
+                    if tempCos[-1] > -0.01 and tempCos[-1] < 0.01:
+                        listOfFactors.append("+-sqrt(" + str(factor) + ")")
+                        nextCos = tempCos
+        if len(listOfFactors) > 2:
+            return([listOfFactors, nextCos])
 
 def solveQuadratic(terms):
     a = terms[0]
     b = terms[1]
     c = terms[2]
     roots = []
+    print(a, b, c)
     if b ** 2 - 4 * a * c >= 0:
         for i in range(2):
-            root = -(b + (-1 ** i) * math.sqrt(b ** 2 - 4 * a * c)) / 2 * a
+            root = ((0 - b) + ((-1) ** i) * math.sqrt(b ** 2 - 4 * a * c)) / 2 * a
+            print(root)
+            print((-1) ** i)
             if roots.count(root) == 0:
                 roots.append(root)
         return(roots)
-    else: 
-        return("coplex roots")
+    else:
+        return("complex roots")
     
 equation = input("input a cubic in the form 'ax+bx+cx+d', with the terms in order of decending powers. Include all terms with a 0 coefficient, and include 1 coefficients (no naked x's). Don't input powers.\n")
 terms = list(map(lambda x: int(x), equation.split("x")))
 
 print(terms)
-print(int(terms[1]))
-#results = findFactor(terms)
-#print(results)
-print(solveQuadratic(terms))
+results = findFactor(terms)
+print(results)
+#print(solveQuadratic(terms))
