@@ -78,6 +78,7 @@ def findFactor(terms):
                     listOfPosFactors.append(fac / tor)
                     print(fac/tor)
                 tempCos = syntheticDivision(terms, fac / tor)
+                print("remainder ", tempCos[-1])
                 if (tempCos[-1] > -0.01 and tempCos[-1] < 0.01) and listOfFactors.count(fac / tor) == 0:
                     listOfFactors.append(fac / tor)
                     nextCos = tempCos
@@ -87,6 +88,8 @@ def findFactor(terms):
             for factor in listOfPosFactors:
                 if factor > 0:
                     tempCos = syntheticDivision(terms, math.sqrt(factor))
+                    print("sqrt ", factor)
+                    print(tempCos[-1])
                     if tempCos[-1] > -0.01 and tempCos[-1] < 0.01:
                         listOfFactors.append("+-sqrt(" + str(factor) + ")")
                         nextCos = tempCos
