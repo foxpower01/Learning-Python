@@ -61,8 +61,10 @@ def syntheticDivision(terms, factor):
 def findFactor(terms):
     listOfFactors = []
     listOfPosFactors = []
+    nextCos = []
     if terms[-1] == 0:
         listOfFactors.append(0)
+        print("hi")
         if solveQuadratic(terms) != "complex roots":
             for factor in solveQuadratic(terms):
                 listOfFactors.append(factor)
@@ -93,8 +95,13 @@ def findFactor(terms):
                     if tempCos[-1] > -0.01 and tempCos[-1] < 0.01:
                         listOfFactors.append("+-sqrt(" + str(factor) + ")")
                         nextCos = tempCos
-        if len(listOfFactors) > 2:
-            return([listOfFactors, nextCos])
+            if len(listOfFactors) > 1:
+                return([listOfFactors, nextCos])
+            else:
+                print(listOfFactors)
+                for factor in solveQuadratic(nextCos):
+                    listOfFactors.append(factor)
+                return([listOfFactors])
 
 def solveQuadratic(terms):
     a = terms[0]
@@ -112,11 +119,15 @@ def solveQuadratic(terms):
         return(roots)
     else:
         return("complex roots")
-    
-equation = input("input a cubic in the form 'ax+bx+cx+d', with the terms in order of decending powers. Include all terms with a 0 coefficient, and include 1 coefficients (no naked x's). Don't input powers.\n")
-terms = list(map(lambda x: int(x), equation.split("x")))
 
-print(terms)
-results = findFactor(terms)
-print(results)
-#print(solveQuadratic(terms))
+def main():  
+    equation = input("input a cubic in the form 'ax+bx+cx+d', with the terms in order of decending powers. Include all terms with a 0 coefficient, and include 1 coefficients (no naked x's). Don't input powers.\n")
+    terms = list(map(lambda x: int(x), equation.split("x")))
+
+    print(terms)
+    results = findFactor(terms)
+    print(results)
+    #print(solveQuadratic(terms))
+
+if __name__ == "__main__":
+    main()
