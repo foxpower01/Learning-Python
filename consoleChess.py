@@ -1,9 +1,5 @@
 # [["pawn", 1]["rook", 2]["knight", 3]["bishop", 4]["queen", 5]["king", 6]["empty", 0]], COLORS: [[0, black], [1, white]]
 
-from ast import Return
-from re import A
-
-
 whiteTaken = []
 blackTaken = []
 
@@ -68,6 +64,21 @@ class Pawn(Piece):
             return(False)
         else: 
             return(True)
+
+    def canMove(self, newPos):
+        if newPos == self.position:
+            return(False)
+        if newPos[1] == self.position[1]:
+            if newPos[0] == self.position[0] + 1: #needs to be changed to work with Black
+                if self.canTake(newPos):
+                    return(True)
+                else:
+                    return(False)
+            if newPos[0] == self.position[0] + 2 and self.hasMoved() == False: #^^
+                if self.canTake(newPos):
+                    return(True)
+                else:
+                    return(False)
 
 class Rook(Piece):
 
