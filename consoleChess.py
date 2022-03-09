@@ -291,10 +291,12 @@ def main():
         print(piecePosition)
         if board.getPosition(piecePosition)[1]:
             print(symbols[board.getPosition(piecePosition)[1]][board.getPosition(piecePosition)[0]])
-            confirm == parseInput(input("is this the piece you wanted to move at position ", piecePosition, "? y/n"))
+            print(piecePosition)
+            confirm = input("is this the piece you wanted to move? y/n")
+            print(confirm)
         else:
             print("invalid piece.")
-    newPos = input("what position would you like to move this piece to? Input the position as 'row, column'")
+    newPos = parseInput(input("what position would you like to move this piece to? Input the position as 'row, column'"))
     piece = Piece(board.getPosition(piecePosition)[0], piecePosition, board.getPosition(piecePosition)[1])
     if setPiece().canMove(newPos):
         board.setBoardState(piecePosition, newPos)
