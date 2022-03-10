@@ -14,6 +14,7 @@ class Board(object):
         return(self.state)
 
     def getPosition(self, position):
+        print(position)
         return(self.state[position[0]][position[1]])
 
     def setBoardState(self, posOld, newPos):
@@ -92,17 +93,17 @@ class Pawn(Piece):
         if newPos == self.position:
             return(False)
         if newPos[1] == self.position[1]:
-            if newPos[0] == self.position[0] + -1 ** (self.color + 1):
+            if newPos[0] == self.position[0] + (-1) ** (self.color):
                 if self.canTake(newPos):
                     return(True)
                 else:
                     return(False)
-            if newPos[0] == self.position[0] + 2 * -1 ** (self.color + 1) and self.hasMoved() == False:
+            if newPos[0] == self.position[0] + 2 * (-1) ** (self.color) and self.hasMoved() == False:
                 if self.canTake(newPos):
                     return(True)
                 else:
                     return(False)
-        if newPos[0] == self.position[0] + -1 ** (self.color + 1) and abs(newPos[1] - self.position[1]) == 1:
+        if newPos[0] == self.position[0] + (-1) ** (self.color) and abs(newPos[1] - self.position[1]) == 1:
             if board.getPosition(newPos):
                 if self.canTake(newPos):
                     return(True)
@@ -123,9 +124,9 @@ class Rook(Piece):
         elif newPos[0] == self.position[0]:
             if newPos[1] < self.position[1]:
                 step = -1
-            for i in range(self.position[1] + 1, newPos[1], step):
-                if board.getPosition([newPos[0], i]):
-                    return(False)
+                for i in range(self.position[1] + step, newPos[1], step):
+                    if board.getPosition([newPos[0], i]):
+                        return(False)
                 if self.canTake(newPos):
                     return(True)
                 else:
@@ -135,9 +136,9 @@ class Rook(Piece):
         elif newPos[1] == self.position[1]:
             if newPos[0] < self.position[0]:
                 step = -1
-            for i in range(self.position[0] + 1, newPos[0], step):
-                if board.getPosition([newPos[1], i]):
-                    return(False)
+                for i in range(self.position[0] + step, newPos[0], step):
+                    if board.getPosition([i, newPos[1]]):
+                        return(False)
                 if self.canTake(newPos):
                     return(True)
                 else:
@@ -151,14 +152,18 @@ class Knight(Piece):
         super().__init__(pieceType, piecePosition, pieceColor)
 
     def canMove(self, newPos):
+        print(newPos)
+        print(self.position)
         if self.position == newPos:
             return(False)
-        if (abs(newPos[0] - self.position[0]) == 1 and abs(newPos[1] - newPos[1]) == 3) or (abs(newPos[0] - self.position[0]) == 3 and abs(newPos[1] - newPos[1]) == 1):
+        if (abs(newPos[0] - self.position[0]) == 1 and abs(newPos[1] - self.position[1]) == 2) or (abs(newPos[0] - self.position[0]) == 2 and abs(newPos[1] - self.position[1]) == 1):
+            print("correct")
             if self.canTake(newPos):
                 return(True)
             else:
                 return(False)
         else:
+            print("incorrect")
             return(False)
 
 class Bishop(Piece):
@@ -171,6 +176,7 @@ class Bishop(Piece):
         if newPos == self.position:
             return(False)
         elif abs(newPos[0] - self.position[0]) == abs(newPos[1] - self.position[1]):
+            print("correct")
             if newPos[0] > self.position[0]:
                 step.append(1)
             else:
@@ -179,13 +185,17 @@ class Bishop(Piece):
                 step.append(1)
             else:
                 step.append(-1)
+            print(step)
             for i in range(1, newPos[0] - self.position[0]):
                 if board.getPosition([self.position[0]+step[0]*i, self.position[1]+step[1]*i]):
+                    print("found piece")
                     return(False)
-                if self.canTake(newPos):
-                    return(True)
-                else:
-                    return(False)
+            if self.canTake(newPos):
+                print("this works")
+                return(True)
+            else:
+                print("cant take")
+                return(False)
         else:
             return(False)
     
@@ -197,28 +207,31 @@ class Queen(Piece):
     def canMove(self, newPos):
         if newPos == self.position:
             return(False)
+        print("newpos", newPos)
+        print("self", self.position)
         if newPos[0] == self.position[0] or newPos[1] == self.position[1]:
             step = 1
             if newPos[0] == self.position[0]:
                 if newPos[1] < self.position[1]:
                     step = -1
-                for i in range(self.position[1] + 1, newPos[1], step):
+                for i in range(self.position[1] + step, newPos[1], step):
                     if board.getPosition([newPos[0], i]):
                         return(False)
-                    if self.canTake(newPos):
-                        return(True)
-                    else:
-                        return(False)
+                if self.canTake(newPos):
+                    return(True)
+                else:
+                    return(False)
             elif newPos[1] == self.position[1]:
                 if newPos[0] < self.position[0]:
                     step = -1
-                for i in range(self.position[0] + 1, newPos[0], step):
-                    if board.getPosition([newPos[1], i]):
+                for i in range(self.position[0] + step, newPos[0], step):
+                    if board.getPosition([i, newPos[1]]):
+                        print("piece found")
                         return(False)
-                    if self.canTake(newPos):
-                        return(True)
-                    else:
-                        return(False)
+                if self.canTake(newPos):
+                    return(True)
+                else:
+                    return(False)
         if abs(newPos[0] - self.position[0]) == abs(newPos[1] - self.position[1]):
             step = []
             if newPos[0] > self.position[0]:
@@ -232,10 +245,10 @@ class Queen(Piece):
             for i in range(1, newPos[0] - self.position[0]):
                 if board.getPosition([self.position[0]+step[0]*i, self.position[1]+step[1]*i]):
                     return(False)
-                if self.canTake(newPos):
-                    return(True)
-                else:
-                    return(False)
+            if self.canTake(newPos):
+                return(True)
+            else:
+                return(False)
         else:
             return(False)
 
@@ -276,20 +289,17 @@ def setPiece(piece):
     elif int(piece.getType()) == 4:
         piece = Bishop(4, piece.getPos(), piece.getColor())
     elif int(piece.getType()) == 5:
-        piece = Queen(5, piece.getType(), piece.getColor())
+        piece = Queen(5, piece.getPos(), piece.getColor())
     elif int(piece.getType()) == 6:
-        piece = King(6, piece.getType(), piece.getColor())
+        piece = King(6, piece.getPos(), piece.getColor())
     return(piece)
 
-def turn(color): #atm only works with white, probably need to maake seperate black turn function
+def turnW(): #atm only works with white, probably need to maake seperate black turn function
     global piece
-    board.display(color)
+    board.display(1)
     confirm = "n"
     while confirm != "y":
-        if color == 1:
-            piecePosition = parseInput(input("Player 1, chose a piece to move using its position: 'row, column'"))
-        else:
-            piecePosition = parseInput(input("Player 2, chose a piece to move using its position: 'row, column'"))
+        piecePosition = parseInput(input("Player 1, chose a piece to move using its position: 'row, column'"))
         print(piecePosition)
         if board.getPosition(piecePosition)[1]:
             print(symbols[board.getPosition(piecePosition)[1]][board.getPosition(piecePosition)[0]])
@@ -298,11 +308,42 @@ def turn(color): #atm only works with white, probably need to maake seperate bla
             print(confirm)
         else:
             print("invalid piece.")
-    newPos = parseInput(input("what position would you like to move this piece to? Input the position as 'row, column'"))
     piece = Piece(board.getPosition(piecePosition)[0], piecePosition, board.getPosition(piecePosition)[1])
-    if setPiece(piece).canMove(newPos):
-        board.setBoardState(piecePosition, newPos)
-    board.display(color)
+    confirm = "n"
+    while confirm != "y":
+        newPos = parseInput(input("what position would you like to move this piece to? Input the position as 'row, column' "))
+        if setPiece(piece).canMove(newPos):
+            print(newPos)
+            confirm = input("is this where you would like to move? y/n ")
+        else:
+            print("you can't move there!")
+    board.setBoardState(piecePosition, newPos)
+    board.display(1)
+
+def turnB():
+    global piece
+    board.display(0)
+    confirm = "n"
+    while confirm != "y":
+        piecePosition = parseInput(input("Player 2, chose a piece to move using its position: 'row, column' "))
+        print(piecePosition)
+        if board.getPosition(piecePosition)[1] == 0:
+            print(symbols[board.getPosition(piecePosition)[1]][board.getPosition(piecePosition)[0]])
+            confirm = input("is this the piece you wanted to move? y/n ")
+        else:
+            print("invalid piece.")
+    piece = Piece(board.getPosition(piecePosition)[0], piecePosition, board.getPosition(piecePosition)[1])
+    print(piece.getPos())
+    confirm = "n"
+    while confirm != "y":
+        newPos = parseInput(input("what position would you like to move this piece to? Input the position as 'row, column' "))
+        if setPiece(piece).canMove(newPos):
+            print(newPos)
+            confirm = input("is this where you would like to move? y/n ")
+        else:
+            print("you can't move there!")
+    board.setBoardState(piecePosition, newPos)
+    board.display(0)
 
 def main():
     # global piece
@@ -324,7 +365,10 @@ def main():
     #     board.setBoardState(piecePosition, newPos)
     # board.display(0)
     for i in range(5):
-        turn(i + 1 % 2)
+        if i % 2:
+            turnB()
+        else:
+            turnW()
 
 if __name__ == "__main__":
     main()
