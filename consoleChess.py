@@ -1,8 +1,5 @@
 # [["pawn", 1]["rook", 2]["knight", 3]["bishop", 4]["queen", 5]["king", 6]["empty", 0]], COLORS: [[0, black], [1, white]] ⬛♙♘♗♖♕♔♚♛♜♝♞♟
 
-from tkinter import N
-
-
 whiteTaken = []
 blackTaken = []
 symbols = [["□", "♙", "♖", "♘", "♗", "♕", "♔"], ["□", "♟", "♜", "♞", "♝", "♛", "♚"]]
@@ -30,9 +27,10 @@ class Board(object):
                 whiteTaken.append(self.state[newPos[0]][newPos[1]])
             else:
                 blackTaken.append(self.state[newPos[0]][newPos[1]])
-            self.state[newPos[0]][newPos[1]] = piece.getType()
+            self.state[newPos[0]][newPos[1]] = [piece.getType(), piece.getColor()]
         else:
-            self.state[newPos[0]][newPos[1]] = piece.getType()
+            self.state[newPos[0]][newPos[1]] = [piece.getType(), piece.getColor()]
+            print(self.state[newPos[0]][newPos[1]])
     
     def display(self, color):
         global board
@@ -45,6 +43,7 @@ class Board(object):
                 displayBoard.state.append(tempRow)
         if color == 0:
             for row in reversed(board.state):
+                tempRow = []
                 for piece in reversed(row):
                     tempRow.append(symbols[piece[1]][piece[0]])
                 displayBoard.state.append(tempRow)
@@ -267,27 +266,30 @@ def parseInput(input):
         parse.append(int(item))
     return(parse)
 
-def setPiece():
-    global piece
-    if piece.getType == 1:
-        piece = Pawn(1, piece.getPos, piece.getColor)
-    elif piece.getType == 2:
-        piece = Rook(2, piece.getPos, piece.getColor)
-    elif piece.getType == 3:
-        piece = Knight(3, piece.getPos, piece.getColor)
-    elif piece.getType == 4:
-        piece = Bishop(4, piece.getPos, piece.getColor)
-    elif piece.getType == 5:
-        piece = Queen(5, piece.getType, piece.getColor)
-    elif piece.getType == 6:
-        piece = King(6, piece.getType, piece.getColor)
+def setPiece(piece):
+    if int(piece.getType()) == 1:
+        piece = Pawn(1, piece.getPos(), piece.getColor())
+    elif int(piece.getType()) == 2:
+        piece = Rook(2, piece.getPos(), piece.getColor())
+    elif int(piece.getType()) == 3:
+        piece = Knight(3, piece.getPos(), piece.getColor())
+    elif int(piece.getType()) == 4:
+        piece = Bishop(4, piece.getPos(), piece.getColor())
+    elif int(piece.getType()) == 5:
+        piece = Queen(5, piece.getType(), piece.getColor())
+    elif int(piece.getType()) == 6:
+        piece = King(6, piece.getType(), piece.getColor())
     return(piece)
 
-def main():
-    board.display(1)
+def turn(color): #atm only works with white, probably need to maake seperate black turn function
+    global piece
+    board.display(color)
     confirm = "n"
     while confirm != "y":
-        piecePosition = parseInput(input("Player one, chose a piece to move using its position: 'row, column'"))
+        if color == 1:
+            piecePosition = parseInput(input("Player 1, chose a piece to move using its position: 'row, column'"))
+        else:
+            piecePosition = parseInput(input("Player 2, chose a piece to move using its position: 'row, column'"))
         print(piecePosition)
         if board.getPosition(piecePosition)[1]:
             print(symbols[board.getPosition(piecePosition)[1]][board.getPosition(piecePosition)[0]])
@@ -298,8 +300,31 @@ def main():
             print("invalid piece.")
     newPos = parseInput(input("what position would you like to move this piece to? Input the position as 'row, column'"))
     piece = Piece(board.getPosition(piecePosition)[0], piecePosition, board.getPosition(piecePosition)[1])
-    if setPiece().canMove(newPos):
+    if setPiece(piece).canMove(newPos):
         board.setBoardState(piecePosition, newPos)
+    board.display(color)
+
+def main():
+    # global piece
+    # board.display(1)
+    # confirm = "n"
+    # while confirm != "y":
+    #     piecePosition = parseInput(input("Player one, chose a piece to move using its position: 'row, column'"))
+    #     print(piecePosition)
+    #     if board.getPosition(piecePosition)[1]:
+    #         print(symbols[board.getPosition(piecePosition)[1]][board.getPosition(piecePosition)[0]])
+    #         print(piecePosition)
+    #         confirm = input("is this the piece you wanted to move? y/n")
+    #         print(confirm)
+    #     else:
+    #         print("invalid piece.")
+    # newPos = parseInput(input("what position would you like to move this piece to? Input the position as 'row, column'"))
+    # piece = Piece(board.getPosition(piecePosition)[0], piecePosition, board.getPosition(piecePosition)[1])
+    # if setPiece(piece).canMove(newPos):
+    #     board.setBoardState(piecePosition, newPos)
+    # board.display(0)
+    for i in range(5):
+        turn(i + 1 % 2)
 
 if __name__ == "__main__":
     main()
