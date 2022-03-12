@@ -6,7 +6,7 @@ symbols = [["□", "♙", "♖", "♘", "♗", "♕", "♔"], ["□", "♟", "�
 
 class Board(object):
 
-    def __init__(self, boardState = [[[2,0], [3,0], [4,0], [5,0], [6,0], [4,0], [3,0], [2,0]],[[1,0], [1,0], [1,0], [1,0], [1,0], [1,0], [1,0], [1,0]],[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],[[1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1]],[[2,1], [3,1], [4,1], [5,1], [6,1], [4,1], [3,1], [2,1]]], boardColor = 1):
+    def __init__(self, boardState = [[[2,0], [3,0], [4,0], [5,0], [6,0], [4,0], [3,0], [2,0]],[[0,0], [1,0], [1,0], [1,0], [1,0], [1,0], [1,0], [1,0]],[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],[[1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1]],[[2,1], [3,1], [4,1], [5,1], [6,1], [4,1], [3,1], [2,1]]], boardColor = 1):
         self.state = boardState
         self.color = boardColor
 
@@ -103,7 +103,7 @@ class Pawn(Piece):
                     return(True)
                 else:
                     return(False)
-        if newPos[0] == self.position[0] + (-1) ** (self.color) and abs(newPos[1] - self.position[1]) == 1:
+        if newPos[0] == self.position[0] + (-1) ** (self.color) and abs(newPos[1] - self.position[1]) == 1 and board.getPosition(newPos):
             if board.getPosition(newPos):
                 if self.canTake(newPos):
                     return(True)
@@ -111,6 +111,8 @@ class Pawn(Piece):
                     return(False)
             else:
                 return(False)
+        else:
+            return(False)
 
 class Rook(Piece):
 
@@ -122,24 +124,32 @@ class Rook(Piece):
         if newPos == self.position:
             return(False)
         elif newPos[0] == self.position[0]:
-            if newPos[1] < self.position[1]:
+            print("correct 1")
+            if (newPos[1] < self.position[1] and self.color) == 1 or (newPos[1] > self.position[1] and self.color == 0):
+                print("correct 2")
                 step = -1
                 for i in range(self.position[1] + step, newPos[1], step):
                     if board.getPosition([newPos[0], i]):
+                        print("piece found")
                         return(False)
                 if self.canTake(newPos):
+                    print("correct 3")
                     return(True)
                 else:
                     return(False)
             else:
                 return(False)
         elif newPos[1] == self.position[1]:
-            if newPos[0] < self.position[0]:
+            print("correct 1")
+            if (newPos[0] < self.position[0] and self.color == 1) or (newPos[0] > self.position[0] and self.color == 0):
+                print("correct 2")
                 step = -1
                 for i in range(self.position[0] + step, newPos[0], step):
                     if board.getPosition([i, newPos[1]]):
+                        print("piece found")
                         return(False)
                 if self.canTake(newPos):
+                    print("correct 3")
                     return(True)
                 else:
                     return(False)
@@ -271,6 +281,14 @@ class King(Piece):
             if abs(self.position[0] - newPos[0]) == 1:
                 if self.canTake(newPos):
                     return(True)
+        if abs(self.position[0] - newPos[0]) == 1 and abs(newPos[1] - self.position[1]) == 1:
+            if board.getPosition(newPos):
+                if self.canTake(newPos):
+                    return(True)
+                else:
+                    return(False)
+            else:
+                return(False)
 
 def parseInput(input):
     temp = input.split(", ")
