@@ -298,19 +298,34 @@ def parseInput(input):
     return(parse)
 
 def setPiece(piece):
-    if int(piece.getType()) == 1:
-        piece = Pawn(1, piece.getPos(), piece.getColor())
-    elif int(piece.getType()) == 2:
-        piece = Rook(2, piece.getPos(), piece.getColor())
-    elif int(piece.getType()) == 3:
-        piece = Knight(3, piece.getPos(), piece.getColor())
-    elif int(piece.getType()) == 4:
-        piece = Bishop(4, piece.getPos(), piece.getColor())
-    elif int(piece.getType()) == 5:
-        piece = Queen(5, piece.getPos(), piece.getColor())
-    elif int(piece.getType()) == 6:
-        piece = King(6, piece.getPos(), piece.getColor())
+    match piece.getType():
+        case 1:
+            piece = Pawn(1, piece.getPos(), piece.getColor())
+        case 2:
+            piece = Rook(2, piece.getPos(), piece.getColor())
+        case 3:
+            piece = Knight(3, piece.getPos(), piece.getColor())
+        case 4:
+            piece = Bishop(4, piece.getPos(), piece.getColor())
+        case 5:
+            piece = Queen(5, piece.getPos(), piece.getColor())
+        case 6:
+            piece = King(6, piece.getPos(), piece.getColor())
     return(piece)
+    
+    # if int(piece.getType()) == 1:
+    #     piece = Pawn(1, piece.getPos(), piece.getColor())
+    # elif int(piece.getType()) == 2:
+    #     piece = Rook(2, piece.getPos(), piece.getColor())
+    # elif int(piece.getType()) == 3:
+    #     piece = Knight(3, piece.getPos(), piece.getColor())
+    # elif int(piece.getType()) == 4:
+    #     piece = Bishop(4, piece.getPos(), piece.getColor())
+    # elif int(piece.getType()) == 5:
+    #     piece = Queen(5, piece.getPos(), piece.getColor())
+    # elif int(piece.getType()) == 6:
+    #     piece = King(6, piece.getPos(), piece.getColor())
+    # return(piece)
 
 def turnW(): #atm only works with white, probably need to maake seperate black turn function
     global piece
