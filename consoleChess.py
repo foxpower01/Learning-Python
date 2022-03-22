@@ -329,7 +329,6 @@ def turnB(): #Black player's turn (Player 2)
     while confirm != "y":
         newPos = parseInput(input("what position would you like to move this piece to? Input the position as 'row, column'\n"))
         if setPiece(piece).canMove(newPos):
-            print(newPos)
             confirm = input("is this where you would like to move? y/n\n")
         else:
             print("you can't move there!")
