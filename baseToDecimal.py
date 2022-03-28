@@ -1,4 +1,8 @@
+from pickle import TRUE
+
+
 def baseToDecimal(number, base):
+
     numPlaces = []
     output = 0
     for item in list(number)[::-1]:
@@ -7,6 +11,14 @@ def baseToDecimal(number, base):
         output += int(base) ** i * int(numPlaces[i])
     return(output)
 
-number = input("give a positive integer in any base: ")
-base = input("what base is " + number + " in? ")
-print(baseToDecimal(number, base))
+def main():
+
+    number = input("give a positive integer in any base: ")
+    if number == "stop":
+        exit()
+    base = input("what base is " + number + " in? ")
+    print(baseToDecimal(number, base))
+
+if __name__ == "__main__":
+    while TRUE:
+        main()
