@@ -1,12 +1,9 @@
 import tkinter as tk
 
 window = tk.Tk()
-label = tk.Label(text="Name")
-entry = tk.Entry()
-label.pack()
-entry.pack()
-input = entry.get()
-entry.delete(0, tk.END)
-input = tk.Label(text=input)
-input.pack()
+
+entName = tk.Entry(width=40)
+entName.insert(tk.END, "what is your name?")
+entName.pack()
+
 window.mainloop()
