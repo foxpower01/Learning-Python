@@ -1,3 +1,4 @@
+from ast import match_case
 import tkinter as tk
 
 window = tk.Tk()
@@ -13,6 +14,8 @@ for i in range(8):
             borderwidth=1
         )
         frame.grid(row=i, column=j, sticky="nsew")
+        match_case (i + j)
+            
         lbl_piece = tk.Label(frame, text="P")
         lbl_piece.pack(fill=tk.BOTH)
 
