@@ -1,4 +1,3 @@
-from ast import match_case
 import tkinter as tk
 
 window = tk.Tk()
@@ -8,16 +7,28 @@ for i in range(8):
     window.rowconfigure(i, minsize=40, weight=1)
     window.columnconfigure(i, minsize=40, weight=1)
     for j in range(8):
-        frame = tk.Frame(
-            master=window,
-            relief=tk.RAISED,
-            borderwidth=1
-        )
-        frame.grid(row=i, column=j, sticky="nsew")
-        match_case (i + j)
+        print(i+j)
+        match (i + j) % 2:
+            case 0:
+                frame = tk.Frame(
+                    master=window,
+                    relief=tk.RAISED,
+                    borderwidth=1,
+                    bg="#8F8F8F"
+                )
+                frame.grid(row=i, column=j, sticky="nsew")
+                lbl_piece = tk.Label(frame, text="P", bg="#8F8F8F")
+                lbl_piece.pack(fill=tk.BOTH)
+            case _:
+                frame = tk.Frame(
+                    master=window,
+                    relief=tk.RAISED,
+                    borderwidth=1
+                )
+                frame.grid(row=i, column=j, sticky="nsew")
+                lbl_piece = tk.Label(frame, text="P")
+                lbl_piece.pack(fill=tk.BOTH)
+                
             
-        lbl_piece = tk.Label(frame, text="P")
-        lbl_piece.pack(fill=tk.BOTH)
-
 
 window.mainloop()
