@@ -52,8 +52,9 @@ class Board(object):
                 for piece in reversed(row):
                     tempRow.append(symbols[piece[1]][piece[0]])
                 displayBoard.state.append(tempRow)
-        for row in displayBoard.state:
-            print(row)
+        # for row in displayBoard.state:
+        #     print(row)
+        return(displayBoard)
 
 board = Board()
 
