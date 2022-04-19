@@ -30,7 +30,7 @@ def createGUI(board):
                         bg="#8F8F8F"
                     )
                     frame.grid(row=i, column=j, sticky="nsew")
-                    lbl_piece = tk.Button(frame, text=P, bg="#8F8F8F")
+                    lbl_piece = tk.Label(frame, text=P, bg="#8F8F8F")
                     lbl_piece.pack(fill=tk.BOTH)
                 case _:
                     frame = tk.Frame(
@@ -39,11 +39,15 @@ def createGUI(board):
                         borderwidth=1
                     )
                     frame.grid(row=i, column=j, sticky="nsew")
-                    lbl_piece = tk.Button(frame, text=P)
+                    lbl_piece = tk.Label(frame, text=P)
                     lbl_piece.pack(fill=tk.BOTH)
+            lbl_piece.bind("<Button>", handle_click)
     
     window.mainloop()
                 
+def handle_click(event):
+    print(event)
+
 def main():
     global P
     setP("hola")
