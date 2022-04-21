@@ -1,6 +1,8 @@
+from sys import base_prefix
 import tkinter as tk
 
 P = "P"
+boardList = []
 
 def setP(value):
     global P
@@ -12,8 +14,13 @@ def setP(value):
 def createGUI(board):
 
     global P
+    global boardList
     window = tk.Tk()
     window.title("Chess")
+
+    def handle_click(event):
+        print("e")
+        lbl_piece["text"] = "E"
 
     for i in range(8):
         window.rowconfigure(i, minsize=40, weight=1)
@@ -41,12 +48,13 @@ def createGUI(board):
                     frame.grid(row=i, column=j, sticky="nsew")
                     lbl_piece = tk.Label(frame, text=P)
                     lbl_piece.pack(fill=tk.BOTH)
+            boardList.append([i, j, lbl_piece])
             lbl_piece.bind("<Button>", handle_click)
-    
+    print(boardList)
+    testLbl = list(filter(lambda n: n[0] == 1 and n[1] == 1, boardList))[0][2]
+    print(testLbl)
+    testLbl["text"] = "hi"
     window.mainloop()
-                
-def handle_click(event):
-    print(event)
 
 def main():
     global P
@@ -59,6 +67,7 @@ def main():
             ['□', '□', '□', '□', '□', '□', '□', '□'],
             ['♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟'],
             ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜']])
+
 
 if __name__ == "__main__":
     main()
