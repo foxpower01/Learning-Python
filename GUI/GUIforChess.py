@@ -18,8 +18,12 @@ def createGUI(board):
     window = tk.Tk()
     window.title("Chess")
 
-    def handle_click(event):
-        print("e")
+    def handle_click(event, frame):
+        print(frame)
+        # testLbl = list(filter(lambda n: n[0] == 4 and n[1] == 2, boardList))[0][2]
+        # print(testLbl)
+        # testLbl["text"] = "hi"
+        print(event)
         lbl_piece["text"] = "E"
 
     for i in range(8):
@@ -49,11 +53,11 @@ def createGUI(board):
                     lbl_piece = tk.Label(frame, text=P)
                     lbl_piece.pack(fill=tk.BOTH)
             boardList.append([i, j, lbl_piece])
-            lbl_piece.bind("<Button>", handle_click)
+            lbl_piece.bind("<Button>", lambda event: handle_click(event, frame))
     print(boardList)
-    testLbl = list(filter(lambda n: n[0] == 1 and n[1] == 1, boardList))[0][2]
-    print(testLbl)
-    testLbl["text"] = "hi"
+    # testLbl = list(filter(lambda n: n[0] == 4 and n[1] == 2, boardList))[0][2]
+    # print(testLbl)
+    # testLbl["text"] = "hi"
     window.mainloop()
 
 def main():
