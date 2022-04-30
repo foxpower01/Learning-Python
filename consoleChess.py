@@ -1,3 +1,4 @@
+from GUI.GUIforChess import createGUI
 # [["pawn", 1]["rook", 2]["knight", 3]["bishop", 4]["queen", 5]["king", 6]["empty", 0]], COLORS: [[0, black], [1, white]] ⬛♙♘♗♖♕♔♚♛♜♝♞♟
 
 whiteTaken = []
@@ -52,8 +53,9 @@ class Board(object):
                 for piece in reversed(row):
                     tempRow.append(symbols[piece[1]][piece[0]])
                 displayBoard.state.append(tempRow)
-        for row in displayBoard.state:
-            print(row)
+        # for row in displayBoard.state:
+        #     print(row)
+        return(displayBoard.state)
 
 board = Board()
 
@@ -347,7 +349,8 @@ def setPiece(piece): #changes a piece to a specific subclass of it's type
 
 def turnW(): #White player's turn (Player 1)
     global piece
-    board.display(1)
+    # board.display(1)
+    createGUI(list(board.display(1)))
     confirm = "n"
     while confirm != "y":
         piecePosition = parseInput(input("Player 1, chose a piece to move using its position: 'row, column'\n"))
@@ -368,7 +371,8 @@ def turnW(): #White player's turn (Player 1)
 
 def turnB(): #Black player's turn (Player 2)
     global piece
-    board.display(0)
+    # board.display(0)
+    createGUI(list(board.display(0)))
     confirm = "n"
     while confirm != "y":
         piecePosition = parseInput(input("Player 2, chose a piece to move using its position: 'row, column'\n"))
