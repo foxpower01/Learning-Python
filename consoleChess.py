@@ -80,7 +80,7 @@ class Piece(object):
             return(False)
         return(True)
 
-    def canMoveRook(self, newPos):
+    def canMoveStraight(self, newPos):
         step = 1
         if newPos == self.position:
             return(False)
@@ -104,7 +104,7 @@ class Piece(object):
         else:
             return(False)
 
-    def canMoveBishop(self, newPos):
+    def canMoveDiagonal(self, newPos):
         step = []
         if newPos == self.position:
             return(False)
@@ -171,7 +171,7 @@ class Rook(Piece):
         super().__init__(pieceType, piecePosition, pieceColor)
 
     def canMove(self, newPos):
-        return(self.canMoveRook(newPos))
+        return(self.canMoveStraight(newPos))
         # step = 1
         # if newPos == self.position:
         #     return(False)
@@ -217,7 +217,7 @@ class Bishop(Piece):
         super().__init__(pieceType, piecePosition, pieceColor)
 
     def canMove(self, newPos):
-        return(self.canMoveBishop(newPos))
+        return(self.canMoveDiagonal(newPos))
         # step = []
         # if newPos == self.position:
         #     return(False)
@@ -246,10 +246,10 @@ class Queen(Piece):
         super().__init__(pieceType, piecePosition, pieceColor)
 
     def canMove(self, newPos):
-        if self.canMoveRook(newPos):
+        if self.canMoveStraight(newPos):
             return(True)
         else:
-            return(self.canMoveBishop(newPos))
+            return(self.canMoveDiagonal(newPos))
         # if newPos == self.position:
         #     return(False)
         # if newPos[0] == self.position[0] or newPos[1] == self.position[1]:
