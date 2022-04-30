@@ -80,6 +80,53 @@ class Piece(object):
             return(False)
         return(True)
 
+    def canMoveRook(self, newPos):
+        step = 1
+        if newPos == self.position:
+            return(False)
+        elif newPos[0] == self.position[0]:
+            if (newPos[1] < self.position[1] and self.color == 1) or (newPos[1] > self.position[1] and self.color == 0):
+                step = -1
+            for i in range(self.position[1] + step, newPos[1], step):
+                if board.getPosition([newPos[0], i])[0]:
+                    return(False)
+            if self.canTake(newPos):
+                return(True)
+            else:
+                return(False)
+        elif newPos[1] == self.position[1]:
+            if (newPos[0] < self.position[0] and self.color == 1) or (newPos[0] > self.position[0] and self.color == 0):
+                step = -1
+            for i in range(self.position[0] + step, newPos[0], step):
+                if board.getPosition([i, newPos[1]])[0]:
+                    return(False)
+            return(self.canTake(newPos))
+        else:
+            return(False)
+
+    def canMoveBishop(self, newPos):
+        step = []
+        if newPos == self.position:
+            return(False)
+        elif abs(newPos[0] - self.position[0]) == abs(newPos[1] - self.position[1]):
+            if newPos[0] > self.position[0]:
+                step.append(1)
+            else:
+                step.append(-1)
+            if newPos[1] > self.position[1]:
+                step.append(1)
+            else:
+                step.append(-1)
+            for i in range(1, newPos[0] - self.position[0]):
+                if board.getPosition([self.position[0]+step[0]*i, self.position[1]+step[1]*i])[0]:
+                    return(False)
+            if self.canTake(newPos):
+                return(True)
+            else:
+                return(False)
+        else:
+            return(False)
+
 piece = Piece(2, [0,0], 0)
 
 class Pawn(Piece):
@@ -124,28 +171,29 @@ class Rook(Piece):
         super().__init__(pieceType, piecePosition, pieceColor)
 
     def canMove(self, newPos):
-        step = 1
-        if newPos == self.position:
-            return(False)
-        elif newPos[0] == self.position[0]:
-            if (newPos[1] < self.position[1] and self.color == 1) or (newPos[1] > self.position[1] and self.color == 0):
-                step = -1
-            for i in range(self.position[1] + step, newPos[1], step):
-                if board.getPosition([newPos[0], i])[0]:
-                    return(False)
-            if self.canTake(newPos):
-                return(True)
-            else:
-                return(False)
-        elif newPos[1] == self.position[1]:
-            if (newPos[0] < self.position[0] and self.color == 1) or (newPos[0] > self.position[0] and self.color == 0):
-                step = -1
-            for i in range(self.position[0] + step, newPos[0], step):
-                if board.getPosition([i, newPos[1]])[0]:
-                    return(False)
-            return(self.canTake(newPos))
-        else:
-            return(False)
+        return(self.canMoveRook(newPos))
+        # step = 1
+        # if newPos == self.position:
+        #     return(False)
+        # elif newPos[0] == self.position[0]:
+        #     if (newPos[1] < self.position[1] and self.color == 1) or (newPos[1] > self.position[1] and self.color == 0):
+        #         step = -1
+        #     for i in range(self.position[1] + step, newPos[1], step):
+        #         if board.getPosition([newPos[0], i])[0]:
+        #             return(False)
+        #     if self.canTake(newPos):
+        #         return(True)
+        #     else:
+        #         return(False)
+        # elif newPos[1] == self.position[1]:
+        #     if (newPos[0] < self.position[0] and self.color == 1) or (newPos[0] > self.position[0] and self.color == 0):
+        #         step = -1
+        #     for i in range(self.position[0] + step, newPos[0], step):
+        #         if board.getPosition([i, newPos[1]])[0]:
+        #             return(False)
+        #     return(self.canTake(newPos))
+        # else:
+        #     return(False)
 
 class Knight(Piece):
 
@@ -169,27 +217,28 @@ class Bishop(Piece):
         super().__init__(pieceType, piecePosition, pieceColor)
 
     def canMove(self, newPos):
-        step = []
-        if newPos == self.position:
-            return(False)
-        elif abs(newPos[0] - self.position[0]) == abs(newPos[1] - self.position[1]):
-            if newPos[0] > self.position[0]:
-                step.append(1)
-            else:
-                step.append(-1)
-            if newPos[1] > self.position[1]:
-                step.append(1)
-            else:
-                step.append(-1)
-            for i in range(1, newPos[0] - self.position[0]):
-                if board.getPosition([self.position[0]+step[0]*i, self.position[1]+step[1]*i])[0]:
-                    return(False)
-            if self.canTake(newPos):
-                return(True)
-            else:
-                return(False)
-        else:
-            return(False)
+        return(self.canMoveBishop(newPos))
+        # step = []
+        # if newPos == self.position:
+        #     return(False)
+        # elif abs(newPos[0] - self.position[0]) == abs(newPos[1] - self.position[1]):
+        #     if newPos[0] > self.position[0]:
+        #         step.append(1)
+        #     else:
+        #         step.append(-1)
+        #     if newPos[1] > self.position[1]:
+        #         step.append(1)
+        #     else:
+        #         step.append(-1)
+        #     for i in range(1, newPos[0] - self.position[0]):
+        #         if board.getPosition([self.position[0]+step[0]*i, self.position[1]+step[1]*i])[0]:
+        #             return(False)
+        #     if self.canTake(newPos):
+        #         return(True)
+        #     else:
+        #         return(False)
+        # else:
+        #     return(False)
     
 class Queen(Piece):
 
@@ -197,49 +246,53 @@ class Queen(Piece):
         super().__init__(pieceType, piecePosition, pieceColor)
 
     def canMove(self, newPos):
-        if newPos == self.position:
-            return(False)
-        if newPos[0] == self.position[0] or newPos[1] == self.position[1]:
-            step = 1
-            if newPos[0] == self.position[0]:
-                if newPos[1] < self.position[1]:
-                    step = -1
-                for i in range(self.position[1] + step, newPos[1], step):
-                    if board.getPosition([newPos[0], i])[0]:
-                        return(False)
-                if self.canTake(newPos):
-                    return(True)
-                else:
-                    return(False)
-            elif newPos[1] == self.position[1]:
-                if newPos[0] < self.position[0]:
-                    step = -1
-                for i in range(self.position[0] + step, newPos[0], step):
-                    if board.getPosition([i, newPos[1]])[0]:
-                        return(False)
-                if self.canTake(newPos):
-                    return(True)
-                else:
-                    return(False)
-        if abs(newPos[0] - self.position[0]) == abs(newPos[1] - self.position[1]):
-            step = []
-            if newPos[0] > self.position[0]:
-                step.append(1)
-            else:
-                step.append(-1)
-            if newPos[1] > self.position[1]:
-                step.append(1)
-            else:
-                step.append(-1)
-            for i in range(1, newPos[0] - self.position[0]):
-                if board.getPosition([self.position[0]+step[0]*i, self.position[1]+step[1]*i])[0]:
-                    return(False)
-            if self.canTake(newPos):
-                return(True)
-            else:
-                return(False)
+        if self.canMoveRook(newPos):
+            return(True)
         else:
-            return(False)
+            return(self.canMoveBishop(newPos))
+        # if newPos == self.position:
+        #     return(False)
+        # if newPos[0] == self.position[0] or newPos[1] == self.position[1]:
+        #     step = 1
+        #     if newPos[0] == self.position[0]:
+        #         if newPos[1] < self.position[1]:
+        #             step = -1
+        #         for i in range(self.position[1] + step, newPos[1], step):
+        #             if board.getPosition([newPos[0], i])[0]:
+        #                 return(False)
+        #         if self.canTake(newPos):
+        #             return(True)
+        #         else:
+        #             return(False)
+        #     elif newPos[1] == self.position[1]:
+        #         if newPos[0] < self.position[0]:
+        #             step = -1
+        #         for i in range(self.position[0] + step, newPos[0], step):
+        #             if board.getPosition([i, newPos[1]])[0]:
+        #                 return(False)
+        #         if self.canTake(newPos):
+        #             return(True)
+        #         else:
+        #             return(False)
+        # if abs(newPos[0] - self.position[0]) == abs(newPos[1] - self.position[1]):
+        #     step = []
+        #     if newPos[0] > self.position[0]:
+        #         step.append(1)
+        #     else:
+        #         step.append(-1)
+        #     if newPos[1] > self.position[1]:
+        #         step.append(1)
+        #     else:
+        #         step.append(-1)
+        #     for i in range(1, newPos[0] - self.position[0]):
+        #         if board.getPosition([self.position[0]+step[0]*i, self.position[1]+step[1]*i])[0]:
+        #             return(False)
+        #     if self.canTake(newPos):
+        #         return(True)
+        #     else:
+        #         return(False)
+        # else:
+        #     return(False)
 
 class King(Piece):
 
@@ -276,7 +329,7 @@ def parseInput(input):
         parse.append(int(item))
     return(parse)
 
-def setPiece(piece): #changes a piece to a specific subclass of it;s type
+def setPiece(piece): #changes a piece to a specific subclass of it's type
     match piece.getType():
         case 1:
             piece = Pawn(1, piece.getPos(), piece.getColor())
