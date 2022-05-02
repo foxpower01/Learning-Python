@@ -22,6 +22,9 @@ class Board(object):
     def getPosition(self, position):
         return(self.state[position[0]][position[1]])
 
+    def getBoardstate(self):
+        return(self.state)
+
     def setBoardState(self, posOld, newPos):
         #positions come as list [row, column]
         global whiteTaken
@@ -172,28 +175,6 @@ class Rook(Piece):
 
     def canMove(self, newPos):
         return(self.canMoveStraight(newPos))
-        # step = 1
-        # if newPos == self.position:
-        #     return(False)
-        # elif newPos[0] == self.position[0]:
-        #     if (newPos[1] < self.position[1] and self.color == 1) or (newPos[1] > self.position[1] and self.color == 0):
-        #         step = -1
-        #     for i in range(self.position[1] + step, newPos[1], step):
-        #         if board.getPosition([newPos[0], i])[0]:
-        #             return(False)
-        #     if self.canTake(newPos):
-        #         return(True)
-        #     else:
-        #         return(False)
-        # elif newPos[1] == self.position[1]:
-        #     if (newPos[0] < self.position[0] and self.color == 1) or (newPos[0] > self.position[0] and self.color == 0):
-        #         step = -1
-        #     for i in range(self.position[0] + step, newPos[0], step):
-        #         if board.getPosition([i, newPos[1]])[0]:
-        #             return(False)
-        #     return(self.canTake(newPos))
-        # else:
-        #     return(False)
 
 class Knight(Piece):
 
@@ -218,27 +199,6 @@ class Bishop(Piece):
 
     def canMove(self, newPos):
         return(self.canMoveDiagonal(newPos))
-        # step = []
-        # if newPos == self.position:
-        #     return(False)
-        # elif abs(newPos[0] - self.position[0]) == abs(newPos[1] - self.position[1]):
-        #     if newPos[0] > self.position[0]:
-        #         step.append(1)
-        #     else:
-        #         step.append(-1)
-        #     if newPos[1] > self.position[1]:
-        #         step.append(1)
-        #     else:
-        #         step.append(-1)
-        #     for i in range(1, newPos[0] - self.position[0]):
-        #         if board.getPosition([self.position[0]+step[0]*i, self.position[1]+step[1]*i])[0]:
-        #             return(False)
-        #     if self.canTake(newPos):
-        #         return(True)
-        #     else:
-        #         return(False)
-        # else:
-        #     return(False)
     
 class Queen(Piece):
 
@@ -250,49 +210,6 @@ class Queen(Piece):
             return(True)
         else:
             return(self.canMoveDiagonal(newPos))
-        # if newPos == self.position:
-        #     return(False)
-        # if newPos[0] == self.position[0] or newPos[1] == self.position[1]:
-        #     step = 1
-        #     if newPos[0] == self.position[0]:
-        #         if newPos[1] < self.position[1]:
-        #             step = -1
-        #         for i in range(self.position[1] + step, newPos[1], step):
-        #             if board.getPosition([newPos[0], i])[0]:
-        #                 return(False)
-        #         if self.canTake(newPos):
-        #             return(True)
-        #         else:
-        #             return(False)
-        #     elif newPos[1] == self.position[1]:
-        #         if newPos[0] < self.position[0]:
-        #             step = -1
-        #         for i in range(self.position[0] + step, newPos[0], step):
-        #             if board.getPosition([i, newPos[1]])[0]:
-        #                 return(False)
-        #         if self.canTake(newPos):
-        #             return(True)
-        #         else:
-        #             return(False)
-        # if abs(newPos[0] - self.position[0]) == abs(newPos[1] - self.position[1]):
-        #     step = []
-        #     if newPos[0] > self.position[0]:
-        #         step.append(1)
-        #     else:
-        #         step.append(-1)
-        #     if newPos[1] > self.position[1]:
-        #         step.append(1)
-        #     else:
-        #         step.append(-1)
-        #     for i in range(1, newPos[0] - self.position[0]):
-        #         if board.getPosition([self.position[0]+step[0]*i, self.position[1]+step[1]*i])[0]:
-        #             return(False)
-        #     if self.canTake(newPos):
-        #         return(True)
-        #     else:
-        #         return(False)
-        # else:
-        #     return(False)
 
 class King(Piece):
 
@@ -300,7 +217,21 @@ class King(Piece):
         super().__init__(pieceType, piecePosition, pieceColor)
     
     def isCheck(self, position):
+        i = 0
+        for row in board.getBoardstate():
+            j = 0
+            for item in row:
+                if item[1] != self.color:
+                    temPiece = Piece(item[0], (i, j), item[1])
+                    if temPiece.canMove(position):
+                        return(True)
+                j += 1
+            i += 1
         return(False)
+
+    def possibleMoves(self):
+        moves = []
+        #in-prog
 
     def canMove(self, newPos):
         if newPos == self.position:
