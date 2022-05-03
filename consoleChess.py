@@ -223,15 +223,21 @@ class King(Piece):
             for item in row:
                 if item[1] != self.color:
                     temPiece = Piece(item[0], (i, j), item[1])
-                    if temPiece.canMove(position):
+                    if setPiece(temPiece).canMove(position):
+                        print("THERE'S A CHECK!!!")
                         return(True)
                 j += 1
             i += 1
         return(False)
 
-    def possibleMoves(self):
-        moves = []
-        #in-prog
+    def isCheckMate(self):
+        moves = [[-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0]]
+        moves = map(addLists(self.position), moves)
+        for newPos in moves:
+            if self.canMove(newPos):
+                if not self.isCheck(newPos):
+                    return(False)
+        return(True)
 
     def canMove(self, newPos):
         if newPos == self.position:
@@ -251,7 +257,9 @@ class King(Piece):
                 else:
                     return(False)
             else:
-                return(False)
+                return(True)
+        else:
+            return(False)
 
 def parseInput(input):
     temp = input.split(", ")
@@ -259,6 +267,12 @@ def parseInput(input):
     for item in temp:
         parse.append(int(item))
     return(parse)
+
+def addLists(list1, list2):
+    newList = []
+    for i in range(len(list1)):
+        newList.append(list1[i] + list2[i])
+    return(newList)
 
 def setPiece(piece): #changes a piece to a specific subclass of it's type
     match piece.getType():
@@ -276,34 +290,55 @@ def setPiece(piece): #changes a piece to a specific subclass of it's type
             piece = King(6, piece.getPos(), piece.getColor())
     return(piece)
 
-def turnW(): #White player's turn (Player 1)
-    global piece
-    board.display(1)
-    confirm = "n"
-    while confirm != "y":
-        piecePosition = parseInput(input("Player 1, chose a piece to move using its position: 'row, column'\n"))
-        if board.getPosition(piecePosition)[1]:
-            print(symbols[board.getPosition(piecePosition)[1]][board.getPosition(piecePosition)[0]])
-            confirm = input("is this the piece you wanted to move? y/n\n")
-        else:
-            print("invalid piece.")
-    piece = Piece(board.getPosition(piecePosition)[0], piecePosition, board.getPosition(piecePosition)[1])
-    confirm = "n"
-    while confirm != "y":
-        newPos = parseInput(input("what position would you like to move this piece to? Input the position as 'row, column'\n"))
-        if setPiece(piece).canMove(newPos):
-            confirm = input("is this where you would like to move? y/n\n")
-        else:
-            print("you can't move there!")
-    board.setBoardState(piecePosition, newPos)
+# def turnW(): #White player's turn (Player 1)
+#     global piece
+#     board.display(1)
+#     confirm = "n"
+#     while confirm != "y":
+#         piecePosition = parseInput(input("Player 1, chose a piece to move using its position: 'row, column'\n"))
+#         if board.getPosition(piecePosition)[1]:
+#             print(symbols[board.getPosition(piecePosition)[1]][board.getPosition(piecePosition)[0]])
+#             confirm = input("is this the piece you wanted to move? y/n\n")
+#         else:
+#             print("invalid piece.")
+#     piece = Piece(board.getPosition(piecePosition)[0], piecePosition, board.getPosition(piecePosition)[1])
+#     confirm = "n"
+#     while confirm != "y":
+#         newPos = parseInput(input("what position would you like to move this piece to? Input the position as 'row, column'\n"))
+#         if setPiece(piece).canMove(newPos):
+#             confirm = input("is this where you would like to move? y/n\n")
+#         else:
+#             print("you can't move there!")
+#     board.setBoardState(piecePosition, newPos)
 
-def turnB(): #Black player's turn (Player 2)
+# def turnB(): #Black player's turn (Player 2)
+#     global piece
+#     board.display(0)
+#     confirm = "n"
+#     while confirm != "y":
+#         piecePosition = parseInput(input("Player 2, chose a piece to move using its position: 'row, column'\n"))
+#         if board.getPosition(piecePosition)[1] == 0:
+#             print(symbols[board.getPosition(piecePosition)[1]][board.getPosition(piecePosition)[0]])
+#             confirm = input("is this the piece you wanted to move? y/n\n")
+#         else:
+#             print("invalid piece.")
+#     piece = Piece(board.getPosition(piecePosition)[0], piecePosition, board.getPosition(piecePosition)[1])
+#     confirm = "n"
+#     while confirm != "y":
+#         newPos = parseInput(input("what position would you like to move this piece to? Input the position as 'row, column'\n"))
+#         if setPiece(piece).canMove(newPos):
+#             confirm = input("is this where you would like to move? y/n\n")
+#         else:
+#             print("you can't move there!")
+#     board.setBoardState(piecePosition, newPos)
+
+def turn(color):
     global piece
-    board.display(0)
+    board.display(color)
     confirm = "n"
     while confirm != "y":
-        piecePosition = parseInput(input("Player 2, chose a piece to move using its position: 'row, column'\n"))
-        if board.getPosition(piecePosition)[1] == 0:
+        piecePosition = parseInput(input(f"Player " + str((2 % (color + 1)) + 1) + ", chose a piece to move using its position: 'row, column'\n"))
+        if board.getPosition(piecePosition)[1] == color:
             print(symbols[board.getPosition(piecePosition)[1]][board.getPosition(piecePosition)[0]])
             confirm = input("is this the piece you wanted to move? y/n\n")
         else:
@@ -320,10 +355,7 @@ def turnB(): #Black player's turn (Player 2)
 
 def main():
     for i in range(10):
-        if i % 2:
-            turnB()
-        else:
-            turnW()
+        turn((i + 1) % 2)
 
 if __name__ == "__main__":
     main()
