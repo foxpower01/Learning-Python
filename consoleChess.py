@@ -24,6 +24,17 @@ class Board(object):
 
     def getBoardstate(self):
         return(self.state)
+        
+    def findInBoard(self, type, color): #only finds first, supposed to be only used to find a King of a certain color
+        i = 0
+        for row in self.state:
+            j = 0
+            for piece in row:
+                if piece[0] == type and piece[1] == color:
+                    return([i, j])
+                j += 1
+            i += 1
+        print("error: piece not found")
 
     def setBoardState(self, posOld, newPos):
         #positions come as list [row, column]
@@ -293,6 +304,12 @@ def setPiece(piece): #changes a piece to a specific subclass of it's type
 def turn(color):
     global piece
     board.display(color)
+    piece = Piece(6, board.findInBoard(6, color), color)
+    if piece.isCheck(piece.position):
+        if piece.isCheckMate(piece.position):
+            print("Player " + str(((color + 1) % 2) + 1) + ", your king has been captured!\nPlayer " + str(((color) % 2) + 1) + " wins!\n")
+            exit()
+        print("Player " + str(((color + 1) % 2) + 1) + ", your king is in check!\n")
     confirm = "n"
     while confirm != "y":
         piecePosition = parseInput(input(f"Player " + str(((color + 1) % 2) + 1) + ", chose a piece to move using its position: 'row, column'\n"))
