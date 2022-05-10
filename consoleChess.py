@@ -9,7 +9,7 @@ class Board(object):
     def __init__(self, boardState = [
         [[2,0], [3,0], [4,0], [5,0], [6,0], [4,0], [3,0], [2,0]],
         [[1,0], [1,0], [1,0], [1,0], [1,0], [1,0], [1,0], [1,0]],
-        [[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],
+        [[0,0], [0,0], [0,0], [0,0], [1,1], [0,0], [0,0], [0,0]],
         [[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],
         [[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],
         [[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],
@@ -149,7 +149,7 @@ class Pawn(Piece):
         super().__init__(pieceType, piecePosition, pieceColor)
     
     def hasMoved(self):
-        if (self.color == 0 and self.position[0] == 2) or (self.color == 1 and self.position[0] == 7):
+        if (self.color == 0 and self.position[0] == 1) or (self.color == 1 and self.position[0] == 6):
             return(False)
         else: 
             return(True)
@@ -232,8 +232,9 @@ class King(Piece):
         for row in board.getBoardstate():
             j = 0
             for item in row:
-                if item[1] != self.color:
+                if item[1] != self.color and item[0]:
                     temPiece = Piece(item[0], (i, j), item[1])
+                    temPiece = setPiece(temPiece)
                     if setPiece(temPiece).canMove(position):
                         print("THERE'S A CHECK!!!")
                         return(True)
@@ -243,7 +244,7 @@ class King(Piece):
 
     def isCheckMate(self):
         moves = [[-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0]]
-        moves = map(addLists(self.position), moves)
+        moves = map(addLists, [self.position], moves)
         for newPos in moves:
             if self.canMove(newPos):
                 if not self.isCheck(newPos):
@@ -305,8 +306,10 @@ def turn(color):
     global piece
     board.display(color)
     piece = Piece(6, board.findInBoard(6, color), color)
+    piece = setPiece(piece)
     if piece.isCheck(piece.position):
-        if piece.isCheckMate(piece.position):
+        print(piece.position)
+        if piece.isCheckMate():
             print("Player " + str(((color + 1) % 2) + 1) + ", your king has been captured!\nPlayer " + str(((color) % 2) + 1) + " wins!\n")
             exit()
         print("Player " + str(((color + 1) % 2) + 1) + ", your king is in check!\n")
@@ -329,8 +332,9 @@ def turn(color):
     board.setBoardState(piecePosition, newPos)
 
 def main():
-    for i in range(10):
+    for i in range(100):
         turn((i + 1) % 2)
+    print("OK stop playing chess it's been 100 moves. It's ovously a stalemate by now.")
 
 if __name__ == "__main__":
     main()
