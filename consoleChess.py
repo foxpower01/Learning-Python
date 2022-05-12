@@ -275,10 +275,14 @@ class King(Piece):
 
 def parseInput(input):
     temp = input.split(", ")
-    parse = []
-    for item in temp:
-        parse.append(int(item))
-    return(parse)
+    if len(temp) == 2:
+        parse = []
+        for item in temp:
+            parse.append(int(item))
+        return(parse)
+    else:
+        print("bad input, please re-enter")
+        return(temp)
 
 def addLists(list1, list2):
     newList = []
@@ -316,7 +320,7 @@ def turn(color):
     confirm = "n"
     while confirm != "y":
         piecePosition = parseInput(input(f"Player " + str(((color + 1) % 2) + 1) + ", chose a piece to move using its position: 'row, column'\n"))
-        if board.getPosition(piecePosition)[1] == color:
+        if len(piecePosition) == 2 and board.getPosition(piecePosition)[1] == color:
             print(symbols[board.getPosition(piecePosition)[1]][board.getPosition(piecePosition)[0]])
             confirm = input("is this the piece you wanted to move? y/n\n")
         else:
@@ -325,7 +329,8 @@ def turn(color):
     confirm = "n"
     while confirm != "y":
         newPos = parseInput(input("what position would you like to move this piece to? Input the position as 'row, column'\n"))
-        if setPiece(piece).canMove(newPos):
+        print(newPos)
+        if len(newPos) == 2 and setPiece(piece).canMove(newPos):
             confirm = input("is this where you would like to move? y/n\n")
         else:
             print("you can't move there!")
