@@ -26,11 +26,22 @@ for list in plotdata:
       item = int(item)
 
 bardata = []
-names = [20210305, 20201003, 20200329]
+names = ['20200329', '20201003', '20210305']
 for item in readData:
-  if item['date'] in names:
+  if str(item['date']) in names:
     bardata.append(item['positive'])
 
+print(bardata)
+
+plt.figure(figsize=(11, 4))
+
+plt.subplot(131)
+plt.bar(names, bardata[::-1])
+plt.ylabel("Positives")
+plt.xlabel("Dates")
+plt.subplot(122)
 plt.plot(plotdata[0], plotdata[1])
+plt.xlabel("Positives")
+plt.ylabel("Deaths")
 
 plt.show()
