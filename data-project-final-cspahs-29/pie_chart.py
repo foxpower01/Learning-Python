@@ -14,4 +14,4 @@ def hoursOfSleep():
   col = utils.extractcolumn(data, 4)
   uniqs = utils.getuniques(col)
   counts = utils.handleuniquevalues(col, uniqs)
-  pie_chart(uniqs, counts, "hours of sleep")
+  pie_chart(uniqs, counts, "Hours of Sleep")
